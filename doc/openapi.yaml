@@ -1,0 +1,7 @@
+---
+openapi: 3.0.3
+info:
+  title: app
+  version: 1.0.0
+servers: []
+paths: {}
