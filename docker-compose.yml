@@ -1,0 +1,33 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    environment:
+      WEB_CONCURRENCY: 0
+      RAILS_MAX_THREADS: 5
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+    volumes:
+      - .:/usr/src/app
+      - bundle:/usr/local/bundle:cached
+    depends_on:
+      mysql:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+  mysql:
+    image: mysql/mysql-server:8.0.32
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+volumes:
+  bundle:
+  mysql:
